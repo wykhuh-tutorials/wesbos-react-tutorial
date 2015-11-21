@@ -1,6 +1,47 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var App = React.createClass({
+  render: function() {
+    return (
+      <div className="catch-of-the-day">
+        <div className="menu">
+          <Header />
+        </div>
+        <Order />
+        <Inventory />
+      </div>
+    )
+  }
+});
+
+var Header = React.createClass({
+  render: function() {
+    return (
+      <header className="top">
+        <h1>Catch of the Day</h1>
+      </header>
+    )
+  }
+});
+
+var Order = React.createClass({
+  render: function() {
+    return (
+      <p>Order</p>
+    )
+  }
+});
+
+
+var Inventory = React.createClass({
+  render: function() {
+    return (
+      <p>Inventory</p>
+    )
+  }
+});
+
 // Store picker component
 var StorePicker = React.createClass({
 
@@ -21,4 +62,4 @@ var StorePicker = React.createClass({
 
 // since React 1.4, to mount component on page, you need React DOM
 // render(component, html element)
-ReactDOM.render(<StorePicker/>, document.querySelector('#main'));
+ReactDOM.render(<App />, document.querySelector('#main'));
