@@ -7,6 +7,8 @@ var Navigation = ReactRouter.Navigation;
 // allows for html 5 push state
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
+var helpers = require('./helpers');
+
 var App = React.createClass({
   render: function() {
     // pass in tagline as a prop to Header Component
@@ -63,7 +65,7 @@ var StorePicker = React.createClass({
       <form className="store-selector">
         <p>Hi {name}.</p>
         <h2>Please enter a store</h2>
-        <input type="text" ref="storeId" required />
+        <input type="text" ref="storeId" defaultValue={helpers.getFunName()} required />
         <input type="Submit" />
       </form>
     )
