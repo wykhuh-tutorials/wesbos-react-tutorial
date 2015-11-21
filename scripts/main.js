@@ -4,6 +4,8 @@ var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var Navigation = ReactRouter.Navigation;
+// allows for html 5 push state
+var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var App = React.createClass({
   render: function() {
@@ -74,7 +76,8 @@ var StorePicker = React.createClass({
 
 // Router decides which component to mount based on url
 var routes = (
-  <Router>
+  // enbable html5 push state
+  <Router history={createBrowserHistory()}>
     <Route path="/" component={StorePicker}/>
     <Route path="/store/:storeId" component={App}/>
   </Router>
