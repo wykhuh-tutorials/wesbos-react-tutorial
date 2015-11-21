@@ -12,6 +12,29 @@ var createBrowserHistory = require('history/lib/createBrowserHistory');
 var helpers = require('./helpers');
 
 var App = React.createClass({
+  // getInitialState is part of React life cycle.
+  // React will execute getInitialState and populate the state before the
+  // component is created.
+  getInitialState: function() {
+    return {
+      fishes: {},
+      order: {}
+    }
+  },
+
+  addFish: function(fish) {
+    // give each fish a unique key
+    var timestamp = Date.now();
+
+    // update the state object
+    this.state.fishes['fish-' + timestamp] = fish;
+
+    // set the state
+
+    // look up the fishes property in the existing state. Set existing fishes
+    // to the new fishes state.
+    this.setState({ fishes: this.state.fishes });
+  },
   render: function() {
     // pass in tagline as a prop to Header Component
     return (
@@ -38,7 +61,6 @@ var AddFishForm = React.createClass({
       desc: this.refs.desc.value,
       image: this.refs.image.value,
     }
-
     console.log(fish)
 
     // add fish to App state
