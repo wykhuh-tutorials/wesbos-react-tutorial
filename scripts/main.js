@@ -22,6 +22,7 @@ var App = React.createClass({
     }
   },
 
+  // add one fish to App state
   addFish: function(fish) {
     // give each fish a unique key
     var timestamp = Date.now();
@@ -35,6 +36,14 @@ var App = React.createClass({
     // to the new fishes state.
     this.setState({ fishes: this.state.fishes });
   },
+
+  // add all sample data to App state
+  loadSamples: function() {
+    this.setState({
+      fishes: require('./sample-fishes')
+    })
+  },
+
   render: function() {
     // pass in tagline as a prop to Header Component
 
@@ -45,7 +54,7 @@ var App = React.createClass({
           <Header tagline="Fresh Seafood Market" />
         </div>
         <Order />
-        <Inventory addFish={this.addFish}/>
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} />
       </div>
     )
   }
@@ -91,6 +100,8 @@ var AddFishForm = React.createClass({
   }
 });
 
+
+
 var Header = React.createClass({
   render: function() {
     return (
@@ -126,6 +137,7 @@ var Inventory = React.createClass({
       <div>
         <h2>Inventory</h2>
         <AddFishForm {...this.props} />
+        <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
       </div>
     )
   }
