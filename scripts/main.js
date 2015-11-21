@@ -37,13 +37,15 @@ var App = React.createClass({
   },
   render: function() {
     // pass in tagline as a prop to Header Component
+
+    // pass addFish() as prop to Inventory
     return (
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
         </div>
         <Order />
-        <Inventory />
+        <Inventory addFish={this.addFish}/>
       </div>
     )
   }
@@ -64,6 +66,10 @@ var AddFishForm = React.createClass({
     console.log(fish)
 
     // add fish to App state
+    
+    // addFish is defined in <App />. We pass down addFish as prop from
+    // Inventory -> AddFishForm.
+    this.props.addFish(fish);
   },
   render: function() {
     return (
@@ -108,11 +114,13 @@ var Order = React.createClass({
 
 
 var Inventory = React.createClass({
+  // pass all the props from Inventory to AddFishForm.
+  // addFish is the only prop on Inventory.
   render: function() {
     return (
       <div>
         <h2>Inventory</h2>
-        <AddFishForm />
+        <AddFishForm {...this.props} />
       </div>
     )
   }
