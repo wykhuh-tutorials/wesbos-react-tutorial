@@ -4,7 +4,9 @@ var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var Navigation = ReactRouter.Navigation;
-// allows for html 5 push state
+var History = ReactRouter.History;
+
+// allows for html5 push state
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var helpers = require('./helpers');
@@ -58,11 +60,33 @@ var Inventory = React.createClass({
 });
 
 var StorePicker = React.createClass({
+  // have to specifiy mixins such has History for an component
+  mixins: [History],
+
+  goToStore: function(event) {
+    // prevent form from submitting and refreshing the page
+    event.preventDefault();
+    // get data from input
+
+    // <input type="text" ref="storeId" ...>
+    // this.refs.storeId refers to the element whose ref = "storeId"
+
+    // this.refs.storeId is on object with lots of js and React properties
+    var storeId = this.refs.storeId.value;
+    console.log(storeId);
+
+    // transition from StorePicker to App
+    this.history.pushState(null, '/store/' + storeId);
+  },
+
   render: function() {
     var name = 'Jane';
+    // 'this' refers to the component.
+    // when the form is submitted, do callback
 
+    // ref allows us to refer to the element from inside the component
     return (
-      <form className="store-selector">
+      <form className="store-selector" onSubmit={this.goToStore}>
         <p>Hi {name}.</p>
         <h2>Please enter a store</h2>
         <input type="text" ref="storeId" defaultValue={helpers.getFunName()} required />
