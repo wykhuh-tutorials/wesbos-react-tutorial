@@ -66,10 +66,13 @@ var AddFishForm = React.createClass({
     console.log(fish)
 
     // add fish to App state
-    
+
     // addFish is defined in <App />. We pass down addFish as prop from
     // Inventory -> AddFishForm.
     this.props.addFish(fish);
+
+    // clears the form
+    this.refs.fishForm.reset();
   },
   render: function() {
     return (
@@ -114,6 +117,8 @@ var Order = React.createClass({
 
 
 var Inventory = React.createClass({
+  // instead of writing each prop, we can use {..this.props} to pass all props.
+
   // pass all the props from Inventory to AddFishForm.
   // addFish is the only prop on Inventory.
   render: function() {
