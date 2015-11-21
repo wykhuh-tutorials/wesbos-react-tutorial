@@ -44,18 +44,50 @@ var App = React.createClass({
     })
   },
 
+  renderFish: function(key) {
+    // when you render a component, the component must have a key property with
+    // a unique key. When there is a change to a particular element, React knows
+    // which component to re-render.
+
+    // we can't access key property inside the component, so we have to create
+    // an index property to access the unique key value
+    return <Fish key={key} index={key} details={this.state.fishes[key]} />
+  },
+
   render: function() {
     // pass in tagline as a prop to Header Component
 
     // pass addFish() as prop to Inventory
+
+    // fishes is a object. map only works on array.
+    // Object.keys returns array that we can use map on.
     return (
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
+          <ul className="list-of-fishes">
+            {Object.keys(this.state.fishes).map(this.renderFish)}
+          </ul>
         </div>
         <Order />
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples} />
       </div>
+    )
+  }
+});
+
+var Fish = React.createClass({
+  render: function() {
+    var details = this.props.details;
+    return (
+      <li className="menu-fish">
+        <img src="{details.image}" alt="{details.name}" />
+        <h3 className="fish-name">
+          {details.name}
+          <span className="price">{helpers.formatPrice(details.price)}</span>
+        </h3>
+        <p>{details.desc}</p>
+      </li>
     )
   }
 });
