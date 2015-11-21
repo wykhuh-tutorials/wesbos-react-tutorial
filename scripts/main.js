@@ -22,6 +22,13 @@ var App = React.createClass({
     }
   },
 
+  // add one order to App state
+  addToOrder: function(key) {
+    // set to 1 or increment by one
+    this.state.order[key] = this.state.order[key] + 1 || 1;
+    this.setState({ order: this.state.order });
+  },
+
   // add one fish to App state
   addFish: function(fish) {
     // give each fish a unique key
@@ -44,6 +51,7 @@ var App = React.createClass({
     })
   },
 
+  // render a fish from App state
   renderFish: function(key) {
     // when you render a component, the component must have a key property with
     // a unique key. When there is a change to a particular element, React knows
@@ -51,7 +59,8 @@ var App = React.createClass({
 
     // we can't access key property inside the component, so we have to create
     // an index property to access the unique key value
-    return <Fish key={key} index={key} details={this.state.fishes[key]} />
+    return <Fish key={key} index={key} details={this.state.fishes[key]}
+      addToOrder={this.addToOrder} />
   },
 
   render: function() {
@@ -77,6 +86,9 @@ var App = React.createClass({
 });
 
 var Fish = React.createClass({
+  onButtonClick: function() {
+    this.props.addToOrder(this.props.index);
+  },
   render: function() {
     var details = this.props.details;
     var isAvailable = (details.status === 'available'? true : false);
@@ -89,7 +101,7 @@ var Fish = React.createClass({
           <span className="price">{helpers.formatPrice(details.price)}</span>
         </h3>
         <p>{details.desc}</p>
-        <button disabled={!isAvailable}>{buttonText}</button>
+        <button disabled={!isAvailable} onClick={this.onButtonClick}>{buttonText}</button>
       </li>
     )
   }
