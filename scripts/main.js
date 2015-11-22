@@ -7,8 +7,11 @@ var Navigation = ReactRouter.Navigation;
 var History = ReactRouter.History;
 // allows for html5 push state
 var createBrowserHistory = require('history/lib/createBrowserHistory');
+// two-way data binding mixin
+var Catalyst = require('react-catalyst');
 
 var helpers = require('./helpers');
+
 // Firebase
 var Rebase = require('re-base');
 // hook up to firebase. base is the reference to firebase.
@@ -16,6 +19,7 @@ var base = Rebase.createClass('https://react-fish-huh.firebaseio.com/');
 
 
 var App = React.createClass({
+  mixins: [Catalyst.LinkedStateMixin],
   // getInitialState is part of React life cycle.
   // React will execute getInitialState and populate the state before the
   // component is created.
@@ -129,7 +133,8 @@ var App = React.createClass({
           </ul>
         </div>
         <Order fishes={this.state.fishes} order={this.state.order}/>
-        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} />
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples}
+          fishes={this.state.fishes} linkState={this.linkState}/>
       </div>
     )
   }
@@ -262,6 +267,15 @@ var Order = React.createClass({
 
 
 var Inventory = React.createClass({
+  renderInventory: function(key) {
+    var linkState = this.props.linkState;
+    //use valueLink instead of value because we want 2-way data binding
+    return (
+      <div className="fish-edit" key={key}>
+        <input type="text" valueLink={linkState('fishes.' + key + '.name')} />
+      </div>
+    )
+  },
   // instead of writing each prop, we can use {..this.props} to pass all props.
 
   // pass all the props from Inventory to AddFishForm.
@@ -270,6 +284,7 @@ var Inventory = React.createClass({
     return (
       <div>
         <h2>Inventory</h2>
+        {Object.keys(this.props.fishes).map(this.renderInventory)}
         <AddFishForm {...this.props} />
         <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
       </div>
