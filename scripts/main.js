@@ -47,6 +47,16 @@ var App = React.createClass({
       // 'this' refer to App compontent
       { context: this, state: 'fishes'}
     );
+
+    // grab data for current store from local storage
+    var localStorageRef = localStorage.getItem('order-' + this.props.params.storeId);
+    // set App order state to value in local storage
+    if (localStorageRef) {
+      this.setState({
+        // local storage uses json. need to turn it into object
+        order: JSON.parse(localStorageRef)
+      })
+    }
   },
 
   // componentWillUpdate is part of React life cycle.
@@ -54,7 +64,7 @@ var App = React.createClass({
   componentWillUpdate: function(nextProps, nextState) {
     console.log('next', nextState)
     // get store id from react router using this.props.params
-    // local storage: key, value  as json
+    // local storage: key, value  as json. local storage uses json
     localStorage.setItem(
       'order-' + this.props.params.storeId,
        JSON.stringify(nextState.order)
