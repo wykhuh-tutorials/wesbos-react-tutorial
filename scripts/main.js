@@ -97,12 +97,15 @@ var App = React.createClass({
   },
 
   removeFish: function(key) {
-    // remove item from state by setting to null
-    this.state.fishes[key] = null;
-    // trigger re-render
-    this.setState({
-      fishes: this.state.fishes
-    });
+    // use javascript confirm popup window
+    if(confirm('Are you sure you want to remove fish?')) {
+      // remove item from state by setting to null
+      this.state.fishes[key] = null;
+      // trigger re-render
+      this.setState({
+        fishes: this.state.fishes
+      });
+    }
   },
 
   // add all sample data to App state
