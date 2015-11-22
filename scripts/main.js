@@ -49,6 +49,18 @@ var App = React.createClass({
     );
   },
 
+  // componentWillUpdate is part of React life cycle.
+  // occurs when prop or state chamges
+  componentWillUpdate: function(nextProps, nextState) {
+    console.log('next', nextState)
+    // get store id from react router using this.props.params
+    // local storage: key, value  as json
+    localStorage.setItem(
+      'order-' + this.props.params.storeId,
+       JSON.stringify(nextState.order)
+     )
+  },
+
   // add one order to App state
   addToOrder: function(key) {
     // set to 1 or increment by one
