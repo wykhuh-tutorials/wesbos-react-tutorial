@@ -5,11 +5,15 @@ var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var Navigation = ReactRouter.Navigation;
 var History = ReactRouter.History;
-
 // allows for html5 push state
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var helpers = require('./helpers');
+// Firebase
+var Rebase = require('re-base');
+// hook up to firebase. base is the reference to firebase.
+var base = Rebase.createClass('https://react-fish-huh.firebaseio.com/');
+
 
 var App = React.createClass({
   // getInitialState is part of React life cycle.
@@ -22,10 +26,34 @@ var App = React.createClass({
     }
   },
 
+  // componentDidMount is part of React life cycle.
+  // occurs once after component is rendered
+  componentDidMount: function() {
+    // Rebase syncState() will sync App state with Firebase
+
+    // syncState params are
+    // 1. 'store slug/fishes'
+    //  2. object with context and state
+
+    // firebase will turn 'slug/fishes' and state:fishes into
+    //  { slug:
+    //    { fishes:
+    //      { fish1: {}},
+    //      { fish2: {}},
+    //     }
+    //   }
+    base.syncState(
+      this.props.params.storeId + '/fishes',
+      // 'this' refer to App compontent
+      { context: this, state: 'fishes'}
+    );
+  },
+
   // add one order to App state
   addToOrder: function(key) {
     // set to 1 or increment by one
     this.state.order[key] = this.state.order[key] + 1 || 1;
+
     this.setState({ order: this.state.order });
   },
 
@@ -95,7 +123,7 @@ var Fish = React.createClass({
     var buttonText = (isAvailable ? 'Add To Order' : 'Sold Out!')
     return (
       <li className="menu-fish">
-        <img src="{details.image}" alt="{details.name}" />
+        <img src={details.image} alt={details.name} />
         <h3 className="fish-name">
           {details.name}
           <span className="price">{helpers.formatPrice(details.price)}</span>
