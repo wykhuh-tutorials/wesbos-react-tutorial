@@ -96,6 +96,15 @@ var App = React.createClass({
     this.setState({ fishes: this.state.fishes });
   },
 
+  removeFish: function(key) {
+    // remove item from state by setting to null
+    this.state.fishes[key] = null;
+    // trigger re-render
+    this.setState({
+      fishes: this.state.fishes
+    });
+  },
+
   // add all sample data to App state
   loadSamples: function() {
     this.setState({
@@ -135,7 +144,8 @@ var App = React.createClass({
         </div>
         <Order fishes={this.state.fishes} order={this.state.order}/>
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples}
-          fishes={this.state.fishes} linkState={this.linkState}/>
+          fishes={this.state.fishes} linkState={this.linkState}
+          removeFish={this.removeFish} />
       </div>
     );
   }
@@ -270,6 +280,9 @@ var Inventory = React.createClass({
   renderInventory: function(key) {
     var linkState = this.props.linkState;
     //use valueLink instead of value because we want 2-way data binding
+
+    // to pass key to removeFish(), we need to use bind.
+    // 1st argument is null since we aren't passing 'this'. 2nd argument is key.
     return (
       <div className="fish-edit" key={key}>
         <input type="text" valueLink={linkState('fishes.' + key + '.name')} />
@@ -280,6 +293,9 @@ var Inventory = React.createClass({
         </select>
         <textarea valueLink={linkState('fishes.' + key + '.desc')}></textarea>
         <input type="text" valueLink={linkState('fishes.' + key + '.image')} />
+        <button onClick={this.props.removeFish.bind(null, key)}>
+          Remove Fish
+        </button>
       </div>
     );
   },
