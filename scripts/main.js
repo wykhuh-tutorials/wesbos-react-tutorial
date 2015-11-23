@@ -81,6 +81,13 @@ var App = React.createClass({
     this.setState({ order: this.state.order });
   },
 
+  removeFromOrder: function(key){
+    // FIX: for some reason, setting to null doesn't delete the order.
+    // Wesbos doesn't understand why
+    delete this.state.order[key];
+    this.setState({ order: this.state.order });
+  },
+
   // add one fish to App state
   addFish: function(fish) {
     // give each fish a unique key
@@ -145,7 +152,8 @@ var App = React.createClass({
             {Object.keys(this.state.fishes).map(this.renderFish)}
           </ul>
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order}/>
+        <Order fishes={this.state.fishes} order={this.state.order}
+          removeFromOrder={this.removeFromOrder} />
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples}
           fishes={this.state.fishes} linkState={this.linkState}
           removeFish={this.removeFish} />
@@ -236,10 +244,14 @@ var Order = React.createClass({
   renderOrder: function(key) {
     var fish = this.props.fishes[key];
     var count = this.props.order[key];
+    var removeButton =
+      <button onClick={this.props.removeFromOrder.bind(null, key)}>
+        &times;
+      </button>
 
     if(!fish) {
       return (
-        <li key={key}>Sorry, fish no longer available!</li>
+        <li key={key}>Sorry, fish no longer available! {removeButton}</li>
       );
     }
     return (
@@ -247,6 +259,7 @@ var Order = React.createClass({
         {count} lbs
         {fish.name}
         <span className="price">{helpers.formatPrice(count * fish.price)}</span>
+        {removeButton}
       </li>
     );
   },
